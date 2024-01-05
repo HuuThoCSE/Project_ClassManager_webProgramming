@@ -7,12 +7,12 @@
 
     // Xử lý kết quả
     while ($row = $result->fetch_assoc()) {
-        echo $row['idEvent'] 
-        . " - " . $row['codeEvent'] 
-        . " - " . $row['nameEvent'] 
+        echo $row['event_id'] 
+        . " - " . $row['event_code'] 
+        . " - " . $row['event_name'] 
         . " - " . $row['descriptionEvent'] 
-        . " - " . $row['dateEvent'] 
-        . " - " . $row['typeEvent'] . "<br>";
+        . " - " . $row['event_date'] 
+        . " - " . $row['event_type'] . "<br>";
     }
 
     // Đóng kết nối

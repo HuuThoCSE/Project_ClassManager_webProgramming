@@ -18,6 +18,15 @@
             // Người dũng đã đăng nhập
             $user_id = $result->fetch_assoc()['idAccount'];
             $_SESSION['user_id'] = $user_id;
+
+            $sql = "SELECT * FROM Students WHERE idAccount='$user_id'";
+            $result = $conn->query($sql);
+
+            if($result->num_rows > 0){
+                $_SESSION['codeStudent'] = $result->fetch_assoc()['codeStudent'];
+                $_SESSION['fullname'] = $result->fetch_assoc()['fullnameStudent'];
+            }
+
             header('Location: index.php');
             exit;
         } else {

@@ -7,9 +7,10 @@
 
     // Xử lý kết quả
     while ($row = $result->fetch_assoc()) {
-        echo $row['idStudent'] . " - " . $row['codeStudent'] . " - " . $row['fullnameStudent'] . "<br>";
+        echo "<a href='infoStudent.php?studentCode=".$row["student_code"]."' >".$row["full_name"]."</a> </br>";
     }
 
     // Đóng kết nối
     $conn = null;
 ?>
+
