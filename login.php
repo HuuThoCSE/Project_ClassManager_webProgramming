@@ -10,16 +10,16 @@
         $password = $_POST['password'];
 
         // Truy vấn CSDL để lấy ID user
-        $sql = "SELECT idAccount FROM Accounts WHERE username='$username' AND password='$password'";
+        $sql = "SELECT account_id FROM Accounts WHERE username='$username' AND password='$password'";
         $result = $conn->query($sql);
 
         // Kiểm tra kết quả truy vấn
         if($result->num_rows > 0){
             // Người dũng đã đăng nhập
-            $user_id = $result->fetch_assoc()['idAccount'];
+            $user_id = $result->fetch_assoc()['account_id'];
             $_SESSION['user_id'] = $user_id;
 
-            $sql = "SELECT * FROM Students WHERE idAccount='$user_id'";
+            $sql = "SELECT * FROM Students WHERE account_id='$user_id'";
             $result = $conn->query($sql);
 
             if($result->num_rows > 0){

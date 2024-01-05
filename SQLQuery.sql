@@ -10,7 +10,6 @@ create table Classes(
     class_name varchar(50)
 );
 
-
 CREATE TABLE Accounts(
     account_id INT AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(16) NOT NULL,
@@ -24,6 +23,12 @@ CREATE TABLE Terms (
     end_year INT NOT NULL
 );
 
+CREATE TABLE Departments(
+    department_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    department_code VARCHAR(10),
+    department_name VARCHAR(100)
+);
+
 -- Bảng "Students"
 CREATE TABLE Students (
     student_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,10 +38,12 @@ CREATE TABLE Students (
     gender VARCHAR(10) NOT NULL DEFAULT 'unknown',
     class_id INT NOT NULL,
     term_id INT NOT NULL DEFAULT 1,
+    department_id INT DEFAULT 1,
     account_id INT,
     FOREIGN KEY (class_id) REFERENCES Classes(class_id),
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id),
-    FOREIGN KEY (term_id) REFERENCES Terms(term_id)
+    FOREIGN KEY (term_id) REFERENCES Terms(term_id),
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
 );
 
 ALTER TABLE Students
@@ -79,19 +86,36 @@ create table EventAttendances(
 	UNIQUE (event_id, student_id) -- Thiết lập ràng buộc
 );
 
+CREATE TABLE Semesters(
+    semester_id int AUTO_INCREMENT PRIMARY KEY,
+    semester_code VARCHAR(3),
+    semester_name VARCHAR(100)
+);
+
+CREATE TABLE StudentErollSemster(
+    id int AUTO_INCREMENT PRIMARY KEY,
+    semester_id int,
+    student_id int,
+    status bool NOT NULL DEFAULT 1
+);
+
 -- Insert value for table "Term"
 INSERT INTO Terms (term_name, start_year, end_year) 
 VALUES ('46', 2021, 2025);
 
 -- Tạo bản ghi cho bảng "Classes"
 INSERT INTO Classes (class_code, class_name)
-VALUES ('1KMT21A', N'ĐH KHMT 2021'), 
+VALUES ('1KMT21A', N'ĐH. KHMT 2021'), 
         ('1CTT21A1', N'ĐH CNTT 2021 LỚP 1');
 
+-- Tạo bản ghi cho bảng "Classes"
+INSERT INTO Departments (department_code, department_name)
+VALUES ('CNTT', 'Công nghệ thông tin');
 
 -- Tạo bản ghi cho bảng "Students"
 INSERT INTO Students (student_code, full_name, birthday, gender, class_id, term_id)
 VALUES
+    ('21022001', N'Châu Mai Tuấn Lâm', '2003-01-01', 'male', 1, 1),
     ('21022002', N'Âu Thị Anh Thư', '2003-01-01', 'female', 1, 1),
     ('21022003', N'Nguyễn Võ Nhật Tân', '2003-01-01', 'male', 1, 1),
     ('21022004', N'Phan Nguyễn Đình Trí', '2003-01-01', 'male', 1, 1),
@@ -142,3 +166,31 @@ VALUES
     ('CCT10', '2023-10-02', N'Chào cờ tháng 10', 'school'),
     ('CCT11', '2023-11-06', N'Chào cờ tháng 11', 'school'),
     ('CCT12', '2023-12-04', N'Chào cờ tháng 12', 'school');
+
+INSERT INTO Semesters(semester_code, semester_name)
+    VALUES ('231', 'Học kỳ 1 - 2023, 2024');
+
+DELIMITER //
+
+CREATE PROCEDURE while_loop()
+BEGIN
+
+  SET @i = 1;
+
+  WHILE @i <= 23 DO 
+    INSERT INTO StudentErollSemster(semester_id, student_id) 
+    VALUES (1, @i);
+
+    SET @i = @i + 1;
+  END WHILE;
+
+END //
+
+DELIMITER ;
+
+CALL while_loop();
+
+-- Sinh viên không có học trong học kỳ
+UPDATE StudentErollSemster
+SET status = 0
+WHERE semester_id = 1 AND student_id = 7;
