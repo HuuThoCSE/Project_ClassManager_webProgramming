@@ -53,14 +53,9 @@ $result = mysqli_query($conn, $sql);
 
 // Check if there are results
 if (mysqli_num_rows($result) > 0) {
+
     // Loop through the results
     while ($row = mysqli_fetch_assoc($result)) {
-        // Print the desired columns
-        
-        // $phpWord = new PhpWord();
-
-        // $word->loadTemplate("template/template_trainingScoreForm.docx");
-
         $templateProcessor = new TemplateProcessor('template/template_trainingScoreForm.docx"');
 
         $templateProcessor->setValue('student_fullname', $row['full_name']);
@@ -69,7 +64,46 @@ if (mysqli_num_rows($result) > 0) {
         $templateProcessor->setValue('department_name', $row['department_name']);
         $templateProcessor->setValue('term_name', $row['term_name']);
 
-        // $document = $phpWord->loadTemplate("template/template_trainingScoreForm.docx");
+
+        $templateProcessor->setValue('day', date("d"));
+        $templateProcessor->setValue('month', date("m"));
+        $templateProcessor->setValue('year', date("Y"));
+
+        // I
+
+        $cnI3 = 2;
+        $templateProcessor->setValue('cnI3', (string)$cnI3);
+
+        $cnI4 = 2;
+        $templateProcessor->setValue('cnI4', (string)$cnI4);
+        
+        // II
+
+        $cnII1 = 5;
+        $templateProcessor->setValue('cnII1', (string)$cnII1);
+
+        $cnII21 = 5; // Chào cờ
+        $templateProcessor->setValue('cnII21', (string)$cnII21);
+
+        $cnII22 = 10; // Hoạt động chính trị xã hội
+        $templateProcessor->setValue('cnII22', (string)$cnII22);
+
+        $cnII23 = 5; 
+        $templateProcessor->setValue('cnII23', (string)$cnII23);
+
+        // III
+        $cnIII3 = 6;
+        $templateProcessor->setValue('cnIII3', (string)$cnIII3);
+
+        // VI
+        $cnIV1 = 10;
+        $templateProcessor->setValue('cnIV1', (string)$cnIV1);
+
+        $cnIV2 = 5;
+        $templateProcessor->setValue('cnIV2', (string)$cnIV2);
+
+        $cnIV2 = 10;
+        $templateProcessor->setValue('cnIV2', (string)$cnIV2);
 
         $pathToSave = 'export/'.substr($row['student_code'], -2)."_".$row['student_code']."_".$row['full_name'].'.docx';
         $templateProcessor->saveAs($pathToSave);
